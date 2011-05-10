@@ -1,5 +1,5 @@
 from ssa import *
-from sccp import *
+from const import *
 
 b = []
 for i in range(8):
@@ -81,7 +81,9 @@ ssa_rename(b)
 for block in b:
     print str(block)
 
-#values = sccp(b, uses)
+(vars, defs, uses) = def_uses(b)
 
-#for var in values:
-#    print var, values[var]
+values = sccp(b, vars, uses)
+
+for var in values:
+    print var, values[var]

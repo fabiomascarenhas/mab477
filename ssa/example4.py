@@ -1,5 +1,5 @@
 from ssa import *
-from sccp import *
+from const import *
 
 b = []
 for i in range(6):
@@ -73,13 +73,21 @@ ssa_rename(b)
 for block in b:
     print str(block)
 
-#values = sccp(b, uses)
+(vars, defs, uses) = def_uses(b)
 
-#for var in values:
-#    print var, values[var]
+print vars
 
-#rewrite(uses, values)
+values1 = sscp(vars, defs, uses)
+values2 = sccp(b, vars, uses)
 
-#for block in b:
-#    if block.marked:
-#        print str(block)
+keys = values1.keys()
+keys.sort()
+
+for var in keys:
+  print var, "\t", values1[var], "\t", values2[var]
+
+rewrite(uses, values2)
+
+for block in b:
+    if block.live:
+        print str(block)
