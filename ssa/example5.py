@@ -1,5 +1,6 @@
 from ssa import *
 from const import *
+from licm import *
 
 b = []
 for i in range(7):
@@ -85,22 +86,20 @@ ssa_rename(b)
 for block in b:
     print str(block)
 
-(vars, defs, uses) = def_uses(b)
+defs = find_defs(b)
+#for (var, block) in defs.items():
+#	print var
+#	print str(block)
 
-print vars
+loops = find_loops(b)
+for (h, bs) in loops:
+	print h.name + ": ",
+	for block in bs:
+		print block.name + ", ",
+	print
 
-values1 = sscp(vars, defs, uses)
-values2 = sccp(b, vars, uses)
-
-keys = values1.keys()
-keys.sort()
-
-for var in keys:
-  print var, "\t", values1[var], "\t", values2[var]
-
-rewrite(uses, values2)
+licm(defs, loops)
 
 for block in b:
-    if block.live:
-        print str(block)
+    print str(block)
 

@@ -1,5 +1,6 @@
 from ssa import *
 from const import *
+from licm import *
 
 b = []
 for i in range(13):
@@ -41,7 +42,7 @@ b[7].br(b[8])
 b[8]("t2 = l < 50")
 b[8].brc("t2", b[9], b[10])
 
-b[9]("l = l + 4")
+b[9]("l = z + 4")
 b[9].br(b[10])
 
 b[10]("t3 = l < 10")
@@ -104,3 +105,21 @@ values = sccp(b, vars, uses)
 
 for var in values:
     print var, values[var]
+
+defs = find_defs(b)
+#for (var, block) in defs.items():
+#	print var
+#	print str(block)
+
+loops = find_loops(b)
+for (h, bs) in loops:
+	print h.name + ": ",
+	for block in bs:
+		print block.name + ", ",
+	print
+
+licm(defs, loops)
+
+for block in b:
+    print str(block)
+
