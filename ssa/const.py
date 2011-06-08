@@ -125,7 +125,7 @@ def sccp(blocks, vars, uses):
                 if tag == "br":
                     cfgwl.append(op[1])
                 elif tag == "brc":
-                    cond = values[op[1]]
+                    cond = check_var(op[1], values)
                     if cond == BOTTOM:
                         cfgwl.append(op[2])
                         cfgwl.append(op[3])
@@ -158,7 +158,7 @@ def sccp(blocks, vars, uses):
                 for pair in pairs:
                     val = meet(val, check_var(pair[0], values))
             elif use[0] == "brc":
-                cond = values[use[1]]
+                cond = check_var(use[1], values)
                 if cond == BOTTOM:
                     cfgwl.append(use[2])
                     cfgwl.append(use[3])
