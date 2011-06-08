@@ -110,21 +110,29 @@ def gen_cmds(cmds):
 	for cmd in cmds:
 		gen_cmd(cmd)
 
-gen_cmds([["attr", "a", \
-   ["binop", "+", \
-      ["binop", "*", \
-         ["var", "a"], ["num", 5]],\
-      ["binop", "+", \
-         ["num", 3], ["var", "a"]]]],\
- ["while",\
-  ["binop", "&&", \
-      ["binop", ">", \
-         ["var", "a"], ["num", 5]],\
-      ["binop", "<=", \
-         ["num", 3], ["var", "y"]]],[\
-   ["while",["binop", ">", ["var", "a"], ["num", 5]],[\
-   ["attr", "b", ["num", 3]], ["attr", "x", ["num", 3]]]], ["attr", "x", ["num", 3]]]],\
-  ["return", ["var", "a"]]])
+ast = [[ 'func', 'atoi', [ 's_0x100100150', ],],\
+[ 'func', 'printf', [ 's_0x100100240', '...', ],],\
+[ 'func', 'main', [],\
+[  [ 'attr', 'x_0x100100510', [ 'num', 0 ]],   [ 'attr', 'n_0x1001004d0', [ 'num', 1 ]],   [ 'attr', 'a_0x100100690', [ 'num', 0 ]],   [ 'while', [ 'binop', '<', [ 'var', 'a_0x100100690'], [ 'var', 'n_0x1001004d0']],   [    [ 'attr', 'b_0x100100650', [ 'num', 0 ]],     [ 'while', [ 'binop', '<', [ 'var', 'b_0x100100650'], [ 'var', 'n_0x1001004d0']],     [      [ 'attr', 'c_0x100100610', [ 'num', 0 ]],       [ 'while', [ 'binop', '<', [ 'var', 'c_0x100100610'], [ 'var', 'n_0x1001004d0']],       [        [ 'attr', 'd_0x1001005d0', [ 'num', 0 ]],         [ 'while', [ 'binop', '<', [ 'var', 'd_0x1001005d0'], [ 'var', 'n_0x1001004d0']],         [          [ 'attr', 'e_0x100100590', [ 'num', 0 ]],           [ 'while', [ 'binop', '<', [ 'var', 'e_0x100100590'], [ 'var', 'n_0x1001004d0']],           [            [ 'attr', 'f_0x100100550', [ 'num', 0 ]],             [ 'while', [ 'binop', '<', [ 'var', 'f_0x100100550'], [ 'var', 'n_0x1001004d0']],             [              [ 'attr', 'x_0x100100510', [ 'binop', '+', [ 'var', 'x_0x100100510'], [ 'num', 1 ]]],               [ 'attr', 'f_0x100100550', [ 'binop', '+', [ 'var', 'f_0x100100550'], [ 'num', 1 ]]], ]],             [ 'attr', 'e_0x100100590', [ 'binop', '+', [ 'var', 'e_0x100100590'], [ 'num', 1 ]]], ]],           [ 'attr', 'd_0x1001005d0', [ 'binop', '+', [ 'var', 'd_0x1001005d0'], [ 'num', 1 ]]], ]],         [ 'attr', 'c_0x100100610', [ 'binop', '+', [ 'var', 'c_0x100100610'], [ 'num', 1 ]]], ]],       [ 'attr', 'b_0x100100650', [ 'binop', '+', [ 'var', 'b_0x100100650'], [ 'num', 1 ]]], ]],     [ 'attr', 'a_0x100100690', [ 'binop', '+', [ 'var', 'a_0x100100690'], [ 'num', 1 ]]], ]],   [ 'call', 'printf', [[ 'str',"%d\n"], [ 'var', 'x_0x100100510'], ]],   [ 'return', [ 'num', 0 ]], ]],\
+]
+
+#gen_cmds([["attr", "a", \
+#   ["binop", "+", \
+#      ["binop", "*", \
+#         ["var", "a"], ["num", 5]],\
+#      ["binop", "+", \
+#         ["num", 3], ["var", "a"]]]],\
+# ["while",\
+#  ["binop", "&&", \
+#      ["binop", ">", \
+#         ["var", "a"], ["num", 5]],\
+#      ["binop", "<=", \
+#         ["num", 3], ["var", "y"]]],[\
+#   ["while",["binop", ">", ["var", "a"], ["num", 5]],[\
+#   ["attr", "b", ["num", 3]], ["attr", "x", ["num", 3]]]], ["attr", "x", ["num", 3]]]],\
+#  ["return", ["var", "a"]]])
+
+gen_cmds(ast[2][3])
 
 for b in bbs:
 	print str(b)
