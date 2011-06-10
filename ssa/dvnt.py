@@ -57,6 +57,7 @@ def lvn_blocks(bs):
         lvn(b)
 
 def dvnt(b, vn):
+    changed = False
     for (var, phi) in b.phis.items():
         (v1, b1) = phi[0]
         vn1 = vn.get(v1, v1)
@@ -66,6 +67,7 @@ def dvnt(b, vn):
         if useless:
             vn[var] = vn1
             del b.phis[var]
+            changed = True
         else:   # phi(x2, x1) === "x1|x2"
             vns = [vn1, vn2]
             vns.sort()
@@ -73,6 +75,7 @@ def dvnt(b, vn):
             if key in vn:
                 vn[var] = vn[key]
                 del b.phis[var]
+                changed = True
             else:
                 vn[key] = var
     i = 0
@@ -81,10 +84,13 @@ def dvnt(b, vn):
         if op[0] == "=":
             vn[op[1]] = vn.get(op[2], op[2])
             del b.ops[i]
+            changed = True
         else:
             op[2] = vn.get(op[2], op[2])
             op[3] = vn.get(op[3], op[3])
-            if fold(op): continue
+            if fold(op):
+                changed = True
+                continue
             if op[0] == "+" or op[0] == "*":
                 ops = [op[2], op[3]]
                 ops.sort()
@@ -94,6 +100,7 @@ def dvnt(b, vn):
             if sop in vn:
                 vn[op[1]] = vn[sop]
                 del b.ops[i]
+                changed = True
             else:
                 vn[sop] = op[1]
                 i += 1
@@ -115,5 +122,12 @@ def dvnt(b, vn):
                     pair[0] = vn.get(pair[0], pair[0])
     for child in b.children:
         dvnt(child, vn.copy())
+    return changed
 
-
+def full_dvnt(root):
+    changed = True
+    i = 0
+    while changed:
+        changed = dvnt(root, {})
+        i += 1
+    print "Rounds: %i" % i

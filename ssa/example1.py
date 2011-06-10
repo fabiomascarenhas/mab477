@@ -1,5 +1,6 @@
 from ssa import *
 from const import *
+from dvnt import *
 
 b = []
 for i in range(9):
@@ -41,6 +42,7 @@ b[4].ret(0)
 b[5]("""
   a = 5
   d = 3
+  x = b + a
   t = a <= d
      """)
 b[5].brc("t", b[6], b[8])
@@ -48,68 +50,27 @@ b[5].brc("t", b[6], b[8])
 b[6]("d = 6")
 b[6].br(b[7])
 
-b[7]("b = 7")
+b[7]("b = a + b")
 b[7].br(b[3])
 
 b[8]("c = 8")
 b[8].br(b[7])
 
-for block in b:
-    print str(block)
+print_cfg(b)
 
-dom_tree(b)
+full_ssa(b)
 
-print
+print "\nSSA:\n====\n"
 
-for block in b:
-    print block.name + ":",
-    for child in block.children:
-        print " %s(%s)" % (child.name, child.idom.name),
-    print
+print_cfg(b)
 
-dom_frontier(b)
+full_dvnt(b[0])
 
-print
+print "\nGVN:\n====\n"
 
-for block in b:
-    print block.name + ":",
-    for f in block.df:
-        print " %s" % f.name,
-    print
+print_cfg(b)
 
-globals, blocks = find_globals(b)
+full_sccp(b)
 
-print
+print_cfg(b)
 
-print repr(globals)
-
-print
-
-add_phis(globals, blocks)
-
-for block in b:
-    print str(block)
-
-print
-
-ssa_rename(b)
-
-for block in b:
-    print str(block)
-
-(vars, defs, uses) = def_uses(b)
-
-values1 = sscp(vars, defs, uses)
-values2 = sccp(b, vars, uses)
-
-keys = values1.keys()
-keys.sort()
-
-for var in keys:
-  print var, "\t", values1[var], "\t", values2[var]
-
-rewrite(uses, values2)
-
-for block in b:
-    if block.live:
-        print str(block)

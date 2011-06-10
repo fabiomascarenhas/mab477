@@ -213,3 +213,21 @@ def rewrite(uses, values):
                         op[0] = "="
                         del op[3]
 
+
+def prune_cfg(blocks):
+    i = 0
+    while i < len(blocks):
+        if blocks[i].live:
+            i = i + 1
+        else:
+            del blocks[i]
+
+def full_sccp(b):
+    (vars, defs, uses) = def_uses(b)
+    values = sccp(b, vars, uses)
+    keys = values.keys()
+    keys.sort()
+    for var in keys:
+        print var, "\t", values[var]
+    rewrite(uses, values)
+    prune_cfg(b)

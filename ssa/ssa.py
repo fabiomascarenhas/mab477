@@ -214,3 +214,15 @@ def ssa_rename(blocks):
             if var not in stack:
                 stack[var] = []
     rename(blocks[0], counter, stack)
+
+
+def print_cfg(b):
+    for block in b:
+        print str(block)
+
+def full_ssa(b):
+    dom_tree(b)
+    dom_frontier(b)
+    globals, blocks = find_globals(b)
+    add_phis(globals, blocks)
+    ssa_rename(b)
