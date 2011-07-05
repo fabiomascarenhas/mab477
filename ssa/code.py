@@ -37,7 +37,26 @@ def gen_op(op, res = None):
 		glob = newglobal(op[1])
 		if res == None:
 			res = newtemp()
-		emit(["load", res, glob])
+		emit(["loadi", res, glob])
+		return res
+	elif op[0] == "[i]":
+		base = gen_op(op[1])
+		off = newtemp()
+		gen_op(op[2], off)
+		emit(["*", off, off, 4])
+		emit(["+", off, off, base])
+		if res == None:
+			res = newtemp()
+			emit(["loadi", res, off])
+		return res
+	elif op[0] == "[c]":
+		base = gen_op(op[1])
+		off = newtemp()
+		gen_op(op[2], off)
+		emit(["+", off, off, base])
+		if res == None:
+			res = newtemp()
+			emit(["loadc", res, off])
 		return res
 	elif op[0] == "binop":
 		if op[1] not in ["&&", "||"]:
