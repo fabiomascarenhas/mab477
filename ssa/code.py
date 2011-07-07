@@ -32,13 +32,14 @@ def gen_op(op, res = None):
 	if op[0] == "num":
 		if res != None:
 			emit(["=", res, op[1]])
+			return res
 		return op[1]
 	elif op[0] == "str":
 		glob = newglobal(op[1])
-		if res == None:
-			res = newtemp()
-		emit(["loadi", res, glob])
-		return res
+		if res != None:
+			emit(["=", res, glob])
+			return res
+		return glob
 	elif op[0] == "[i]":
 		base = gen_op(op[1])
 		off = newtemp()
