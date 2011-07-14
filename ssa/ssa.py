@@ -118,7 +118,7 @@ def dom_frontier(nodes):
                     runner.df.add(n)
                     runner = runner.idom
 
-def find_globals(nodes):
+def add_phis(nodes):
     blocks = {}
     for n in nodes:
         for var in n.vars:
@@ -139,9 +139,6 @@ def find_globals(nodes):
         if jump != "br":
             if jump[1] in blocks and jump[1] not in locals:
                 globals.add(jump[1])
-    return (globals, blocks)
-
-def add_phis(globals, blocks):
     for var in globals:
         worklist = list(blocks[var])
         while len(worklist) > 0:
@@ -223,6 +220,5 @@ def print_cfg(b):
 def full_ssa(b):
     dom_tree(b)
     dom_frontier(b)
-    globals, blocks = find_globals(b)
-    add_phis(globals, blocks)
+    add_phis(b)
     ssa_rename(b)
